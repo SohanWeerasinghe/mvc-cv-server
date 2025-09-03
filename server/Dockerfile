@@ -1,10 +1,24 @@
-# Simple deployable image
 FROM node:20-alpine
 WORKDIR /app
-COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* .npmrc* ./ 2>/dev/null || true
-RUN npm i
+
+# Copy only package files
+COPY package*.json ./
+COPY pnpm-lock.yaml* ./
+COPY yarn.lock* ./
+COPY .npmrc* ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the app
 COPY . .
+
+# Build the app
 RUN npm run build
+
+# Set port
 ENV PORT=8787
 EXPOSE 8787
-CMD ["npm","start"]
+
+# Start the app
+CMD ["npm", "start"]
