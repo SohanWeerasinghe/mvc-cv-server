@@ -15,7 +15,7 @@ COPY server/.npmrc* ./.npmrc
 RUN npm install
 
 # Copy the rest of the app
-COPY server/. .
+COPY . .
 
 # Build the app
 RUN npm run build
