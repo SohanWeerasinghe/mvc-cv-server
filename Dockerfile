@@ -1,7 +1,7 @@
 FROM node:20-alpine
 WORKDIR /app
 
-# Copy package files from root of build context (server/)
+# Copy only package files
 COPY package*.json ./
 COPY pnpm-lock.yaml* ./
 COPY yarn.lock* ./
@@ -16,7 +16,9 @@ COPY . .
 # Build the app
 RUN npm run build
 
+# Set port
 ENV PORT=8787
 EXPOSE 8787
 
+# Start the app
 CMD ["npm", "start"]
