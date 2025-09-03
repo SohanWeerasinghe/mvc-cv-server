@@ -1,24 +1,22 @@
 FROM node:20-alpine
 WORKDIR /app
 
-# Copy package files from the server folder
-COPY server/package*.json ./
-COPY server/pnpm-lock.yaml* ./
-COPY server/yarn.lock* ./
-COPY server/.npmrc* ./
+# Copy package files from root of build context (server/)
+COPY package*.json ./
+COPY pnpm-lock.yaml* ./
+COPY yarn.lock* ./
+COPY .npmrc* ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the server app
-COPY server/. .
+# Copy the rest of the app
+COPY . .
 
 # Build the app
 RUN npm run build
 
-# Set environment and expose port
 ENV PORT=8787
 EXPOSE 8787
 
-# Start app
-CMD ["npm","start"]
+CMD ["npm", "start"]
