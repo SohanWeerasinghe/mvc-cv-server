@@ -8,13 +8,23 @@ import { sendEmail } from './email.js';
 import { RpcServer } from './rpc.js';
 
 const PORT = parseInt(process.env.PORT || '8787', 10);
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
-
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://mvc-cv-web-production.up.railway.app"
+];
 let resume = parseResume();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors({ origin: ALLOWED_ORIGIN === '*' ? true : ALLOWED_ORIGIN }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
