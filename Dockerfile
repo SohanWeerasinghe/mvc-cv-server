@@ -4,16 +4,20 @@ FROM node:20-alpine
 # Set the working directory
 WORKDIR /app
 
-# Copy only package files from server folder
-COPY server/package.json server/package-lock.json* server/pnpm-lock.yaml* server/yarn.lock* server/.npmrc* ./ 2>/dev/null || true
+# Copy only package files if they exist
+COPY server/package.json ./package.json
+COPY server/package-lock.json* ./package-lock.json
+COPY server/pnpm-lock.yaml* ./pnpm-lock.yaml
+COPY server/yarn.lock* ./yarn.lock
+COPY server/.npmrc* ./.npmrc
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the code from server folder
+# Copy the rest of the app
 COPY server/. .
 
-# Build the app (if you have a build step)
+# Build the app
 RUN npm run build
 
 # Set environment variables and expose the port
