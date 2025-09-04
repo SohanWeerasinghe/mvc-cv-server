@@ -87,4 +87,3 @@ mcp-cv-server/
 
 ---
 
-Made with ❤️ for a quick, realistic take-home.
